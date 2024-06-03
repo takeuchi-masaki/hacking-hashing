@@ -1,9 +1,8 @@
 #include <bits/stdc++.h>
-typedef long long ll;
 using namespace std;
 
 struct custom_hash { // https://codeforces.com/blog/entry/62393
-    constexpr static uint64_t splitmix64(uint64_t x) { // http://xorshift.di.unimi.it/splitmix64.c
+    constexpr static uint64_t splitmix64(uint64_t x) { // https://doi.org/10.1145/2714064.2660195
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;

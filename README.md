@@ -23,7 +23,7 @@ Competitive Programming in C++: Hashtables and Polynomial String Hashing.
 
 Due to the nature of hashing, for all hashes with more possible states than 
 hash values, with an unlimited number of attempts and computing power, 
-a collision will be found such that M != M' and H(M) == H(M').
+a collision can theoretically be found such that `M != M'` and `H(M) == H(M')`.
 
 The Codeforces platform typically gives a participant +100 points for a
 successful hacking attempt against another competitor and
@@ -46,8 +46,9 @@ with a random seed.
 The C-standard library function rand is legacy code that is not
 suitable for most applications today. The function returns a
 library-dependent value between 0 and RAND_MAX but the C-standard
-only guarantees that RAND_MAX is at least 32767 or $2^{15} - 1$. 
-[source](https://cplusplus.com/reference/cstdlib/RAND_MAX/)
+only guarantees that `RAND_MAX` is at least `32767` or $2^{15} - 1$. 
+
+[cstdlib/RAND_MAX - cplusplus.com](https://cplusplus.com/reference/cstdlib/RAND_MAX/)
 
 ### Mersenne Twister : GOOD
 
@@ -69,6 +70,13 @@ See [It Is High Time We Let Go Of The Mersenne Twister - Sebastiano Viglia (2019
 In the context of competitive programming where implementation speed is 
 a large factor, std::mt19937 is still a very good PRG.
 
+Example Usage:
+```c++
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+#define uid(a, b) uniform_int_distribution<>(a, b)(rng) // [a, b]
+```
+The `uid` macro generates a value between `[a, b]`.
+
 ### Xoshiro : GOOD
 
 New PRGS such as Xoshiro (xor, shift, rotate) only
@@ -89,10 +97,13 @@ to simply using std::uniform_int_distribution with Mersenne Twister
 
 It is not worth using xoshiro or xoroshiro PRGS in competitive programming
 even if template code is set up beforehand since the speed difference
-is not meaningful. However in Heuristics contests such as 
-Atcoder Heuristic Contest, the speed difference of the PRG allows 
-for more iterations of non-deterministic algorithms like 
-Simulated Annealing and thus can lead to a competitive advantage.
+is not significant for algorithm contests. 
+However in Heuristics contests such as Atcoder Heuristic Contest, 
+the speed difference of the PRG allows for more iterations of 
+non-deterministic algorithms like  Simulated Annealing and thus can 
+lead to a competitive advantage.
+
+[Example Template Code:](https://github.com/takeuchi-masaki/Competitive-Programming-Templates/blob/main/xoshiro256.cpp)
 
 ## Seeding PRGs
 
@@ -102,8 +113,11 @@ The sequence can be generated once to find an adversarial testcase.
 
 ### time(nullptr) : BAD
 Like rand, time is part of the C standard library.
+
 "The value returned generally represents the number of seconds since
 00:00 hours, Jan 1, 1970 UTC (i.e., the current _unix timestamp_)"
+[ctime/time - cplusplus.com](https://cplusplus.com/reference/ctime/time/)
+
 The return value is a 32-bit value that increments every second.
 This value is very predictable. By finding the fixed sequence for a
 time range, for example it is possible to generate 60 collision sequences
@@ -123,7 +137,7 @@ Even calling the function above twice in two successive lines in a local
 program yields differing lower bits.
 
 Since the lower bits are very volatile, combined with the avalanche effect in 
-good PRGs, it is not feasible to take advantage of this value when 
+good PRGs, it is not practical to take advantage of this value when 
 used as a seed.
 
 ## Hashtables
@@ -148,21 +162,58 @@ Third, the load factor by default is 1.0, meaning that the hashtable
 bucket-size does not increase until the number of elements equals the 
 previous bucket-size.
 
-By calling std::unordered_map::bucket_size() while adding 
-elements, it is possible to find the set bucket sizes for the 
+By calling std::unordered_set::bucket_count() 
+or std::unordered_map::bucket_count() while adding elements, 
+it is possible to find the set bucket sizes for the 
 specific compiler version.
+
+```c++
+int find_bucket_count(int N) {
+    unordered_set<int64_t> st;
+    int sz = -1;
+    for (int i = 0; i < N; i++) {
+        st.insert(i);
+        if (st.bucket_count() != sz) {
+            sz = st.bucket_count();
+            cout << st.size() << ": " << sz << "\n";
+        }
+    }
+    return sz;
+}
+```
 
 Suppose a problem involves finding the number of duplicated values 
 from a sequence of `n` integers. With few collisions, the expected running
 time using a hashtable is O(n) to process `n` numbers.
 
+```c++
+void run(int N, int bucket_size) {
+    unordered_map<int64_t, int64_t> mp;
+    int64_t curr = 0;
+    for (int i = 0; i < N; i++) {
+        mp[curr]++;
+        curr += bucket_size;
+    }
+
+    int64_t sum = 0;
+    for (int i = 0; i < N; i++) {
+        curr -= bucket_size;
+        sum += mp[curr];
+    }
+    cout << sum << "\n";
+}
+```
+
 By instead adding in equivalent values modulo the last bucket-count, 
 an adversary can force a collision chain of length `n`.
 Instead of each add and lookup operations taking about O(1) time,
-the time complexity could increase to up to O(n) for each operation
+the time complexity could increase to up to `O(n)` for each operation
 and cause a "Time limit exceeded" verdict.
 
-[Example here](https://github.com/takeuchi-masaki/hacking-hashing/blob/main/hashmap/check_bucketsize.cpp)
+With $n = 10^5$, the above code runs in around 10 seconds on a M1 Macbook, 
+while a random set of numbers runs in well under a second.
+
+[Full example here](https://github.com/takeuchi-masaki/hacking-hashing/blob/main/hashmap/check_bucketsize.cpp)
 
 ### Robust solution
 One way to make Hashtables robust against the previous attack is to 
@@ -175,10 +226,12 @@ or std::unordered_map.
 
 However, since [Splitmix can easily be reversed](https://github.com/takeuchi-masaki/hacking-hashing/blob/main/hashmap/reverse_splitmix.cpp)
 , runtime randomness must be additionally added to the funciton.
+Without runtime randomness, instead of adding multiples of the bucketcount,
+an adversary could add the inverse splitmix of the multiples of the bucketcount.
 
 ```c++
 struct custom_hash { // https://codeforces.com/blog/entry/62393
-    constexpr static uint64_t splitmix64(uint64_t x) { // http://xorshift.di.unimi.it/splitmix64.c
+    constexpr static uint64_t splitmix64(uint64_t x) { // https://doi.org/10.1145/2714064.2660195
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
@@ -195,20 +248,23 @@ template<class K, class V> using hashmap = unordered_map<K, V, custom_hash>;
 
 ## Polynomial String Hashing
 
+
 ### Birthday Attack
 When 
 
 ### Thue-Morse Sequence
 The Thue-Morse sequence is "a binary sequence obtained by starting with
-0 and successivel appending the Boolean complement of the sequence so far".
+0 and successivel appending the Boolean complement of the sequence so far". 
+[Thue-Morse sequence - Wikipedia](https://en.wikipedia.org/wiki/Thue%E2%80%93Morse_sequence)
 
 This can be used to attack hashing solutions that let the
 result of polynomial hashing overflow using the 2^n integer bound
 when the base is any odd number. 
 Let the '0's of a Thue-Morse sequence of length of a power of 2 be replaced
 by 'A' and '1's with 'B'.
-This AB string and its inverse (all 'A' swapped with 'B' and vice versa)
-collide 
+This AB Thue-Morse string and its inverse (all 'A's swapped with 'B's 
+and vice versa)
+
 
 ### Other attacks against Fixed-Base Fixed-Modulo hashes
 Since the birthday attack takes about 2^30 operations against a 2^60 modulus,
@@ -232,12 +288,15 @@ and using a large modulo is enough to make it robust against hacking.
 
 
 ## References
+- [cstdlib/RAND_MAX - cplusplus.com](https://cplusplus.com/reference/cstdlib/RAND_MAX/)
+- [ctime/time - cplusplus.com](https://cplusplus.com/reference/ctime/time/)
 - [It is high time we let go of the Mersenne Twister - Sebastian Vigna (2019, preprint)](http://arxiv.org/abs/1910.06437)
   - http://arxiv.org/abs/1910.06437
 - [Blowing up unordered_map, and how to stop getting hacked on it - Codeforces blog](https://codeforces.com/blog/entry/62393)
   - https://codeforces.com/blog/entry/62393
-- [Internet Problem-solving Contest 2014 Problem H: Hashsets Solution](https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf)
+- [Internet Problem-solving Contest 2014 Problem H: Hashsets Solution Michal Forisek](https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf)
   - https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf
 - [Fast Splittable Pseudorandom Number Generators - Guy L. Steele, Doug Lea, and Christine H. Flood (2014)](https://dl.acm.org/doi/abs/10.1145/2660193.2660195)
+- [Thue-Morse sequence - Wikipedia](https://en.wikipedia.org/wiki/Thue%E2%80%93Morse_sequence)
 - [On the mathematics behind rolling hashes and anti-hash tests](https://codeforces.com/blog/entry/60442)
   - https://codeforces.com/blog/entry/60442

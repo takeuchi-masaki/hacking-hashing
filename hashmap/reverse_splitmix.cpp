@@ -11,7 +11,7 @@ constexpr uint64_t SHIFT1 = 30;
 constexpr uint64_t SHIFT2 = 27;
 constexpr uint64_t SHIFT3 = 31;
 /*
-https://prng.di.unimi.it/splitmix64.c
+https://doi.org/10.1145/2714064.2660195
 */
 constexpr uint64_t splitmix64(uint64_t x) {
     uint64_t z = x + ADD;
@@ -55,9 +55,10 @@ constexpr uint64_t unmix64(uint64_t z) {
     return z;
 }
 
-mt19937_64 rng(time(nullptr));
 
 int main() {
+    mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+
     vector<uint64_t> seeds = {
         0x1234567890123456,
         0x5ca1ab1ef005ba11,

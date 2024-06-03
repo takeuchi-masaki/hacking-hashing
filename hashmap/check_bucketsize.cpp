@@ -1,15 +1,13 @@
 #include <bits/stdc++.h>
-typedef long long ll;
 using namespace std;
 
-const int N = int(1e5);
 
 /*
     find last bucket size
     primes dependent on compiler
 */
-int find_size() {
-    unordered_set<ll> st;
+int find_size(int N) {
+    unordered_set<int64_t> st;
     vector<uint32_t> prev;
     for (int i = 0; i < N; i++) {
         st.insert(i);
@@ -21,37 +19,31 @@ int find_size() {
     return prev.back();
 }
 
-vector<ll> get_values(int prev) {
-    vector<ll> to_add;
-    int curr = 0;
-    while (to_add.size() < N) {
-        to_add.push_back(curr);
-        curr += prev;
-    }
-    return to_add;
-}
-
-void run(vector<ll>& to_add) {
-    unordered_map<ll, ll> mp;
+void run(int N, int bucket_size) {
+    unordered_map<int64_t, int64_t> mp;
+    int64_t curr = 0;
     for (int i = 0; i < N; i++) {
-        mp[to_add[i]] = i;
+        mp[curr]++;
+        curr += bucket_size;
     }
-    ll sum = 0;
-    for (auto x : to_add) {
-        sum += mp[x];
+
+    int64_t sum = 0;
+    for (int i = 0; i < N; i++) {
+        curr -= bucket_size;
+        sum += mp[curr];
     }
     cout << sum << "\n";
 }
 
 int main() {
-    int bucket_cnt = find_size();
-    vector<ll> to_add = get_values(bucket_cnt);
+    const int N = int(1e5);
+    int bucket_cnt = find_size(N);
 
-    /* timing operations */
+    /* timing hashmap */
     auto start_time = chrono::steady_clock::now();
 
     /* run adversarial operation */
-    run(to_add);
+    run(N, bucket_cnt);
 
     auto end_time = chrono::steady_clock::now();
     cout << "\nruntime: " << fixed << setprecision(2)
