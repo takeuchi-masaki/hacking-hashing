@@ -9,15 +9,17 @@ vector<int> res;
 
 void add(int start) {
     int curr = start;
-    while(curr <= MAX_VAL && res.size() < MAX_SIZE) {
+    while (curr <= MAX_VAL && res.size() < MAX_SIZE) {
         res.push_back(curr);
         curr += BUCKET_SIZE;
     }
 }
 
 int main() {
-    for (int i = 0; res.size() < MAX_SIZE; i++) {
+    int i = 0;
+    while (res.size() < MAX_SIZE) {
         add(i);
+        i++;
     }
 
     cout << res.size() << "\n";

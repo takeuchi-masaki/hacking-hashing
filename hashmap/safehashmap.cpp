@@ -1,12 +1,13 @@
 #include <iostream>
-#include <unordered_map>
 #include <chrono>
+#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 typedef long long ll;
 using namespace std;
 
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) { // http://xorshift.di.unimi.it/splitmix64.c
+struct custom_hash { // https://codeforces.com/blog/entry/62393
+    constexpr static uint64_t splitmix64(uint64_t x) { // http://xorshift.di.unimi.it/splitmix64.c
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
@@ -17,6 +18,7 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+template<class K> using hashset = unordered_set<K, custom_hash>;
 template<class K, class V> using hashmap = unordered_map<K, V, custom_hash>;
 
 int main() {
