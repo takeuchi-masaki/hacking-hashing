@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include <debugoutput.h>
 typedef unsigned long long ull;
+
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define uid(a, b) uniform_int_distribution<ull>(a, b)(rng)
 
@@ -62,7 +62,7 @@ void test(ull base, int length) {
         if (nxt < MAX_VALUE) {
             // overflowed
             cerr << "length too long for random\n";
-            exit(1);
+            abort();
         }
         MAX_VALUE = nxt;
     }
@@ -97,7 +97,7 @@ void test(ull base, int length) {
 generate all 2^n strings with only 'a' and 'b's, of length n
 */
 void test_iter(int base, int length) {
-    ass(length < 25);
+    assert(length < 25);
     cout << "BASE: " << base << "\tLENGTH: " << length << '\n';
     cout << "CHECKING ITERATIVELY\n";
     unordered_map<ull, ull> M;

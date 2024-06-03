@@ -21,7 +21,7 @@ constexpr uint64_t splitmix64(uint64_t x) {
 }
 
 /*
-Find multiplicative inverse of `x`
+Find multiplicative inverse of odd `x`
 x * inv(x) = 1 MOD 2^64
 https://lemire.me/blog/2017/09/18/computing-the-inverse-of-odd-integers/
 */
@@ -62,9 +62,11 @@ int main() {
         0x1234567890123456,
         0x5ca1ab1ef005ba11,
         0xdeadbea7dad5,
+        unmix64(0),
+        unmix64(1),
         rng(),
         rng(),
-        rng()
+        rng(),
     };
 
     cout << hex;

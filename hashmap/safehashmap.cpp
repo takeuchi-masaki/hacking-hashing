@@ -1,8 +1,4 @@
-#include <iostream>
-#include <chrono>
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
+#include <bits/stdc++.h>
 typedef long long ll;
 using namespace std;
 
@@ -21,10 +17,4 @@ struct custom_hash { // https://codeforces.com/blog/entry/62393
 template<class K> using hashset = unordered_set<K, custom_hash>;
 template<class K, class V> using hashmap = unordered_map<K, V, custom_hash>;
 
-int main() {
-    custom_hash hasher{};
-    vector<int> values = { 1, 0, 212 };
-    for (auto v : values) {
-        cout << hasher(v) << "\n";
-    }
-}
+int main() {}
