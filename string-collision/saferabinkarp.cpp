@@ -2,7 +2,8 @@
 using namespace std;
 
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
-uint64_t base = uniform_int_distribution<uint64_t>(331, uint64_t(1e18))(rng) | 1;
+uint64_t base = uniform_int_distribution<uint64_t>(331, uint64_t(1e18))(rng);
+
 constexpr uint64_t MOD = (1LL << 61) - 1;
 typedef struct mint61 {
     uint64_t val;

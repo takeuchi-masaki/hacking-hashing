@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
-splitmix64 parameters
+    splitmix64 parameters
 */
 constexpr uint64_t ADD = 0x9e3779b97f4a7c15;
 constexpr uint64_t MULT1 = 0xbf58476d1ce4e5b9;
@@ -11,7 +11,7 @@ constexpr uint64_t SHIFT1 = 30;
 constexpr uint64_t SHIFT2 = 27;
 constexpr uint64_t SHIFT3 = 31;
 /*
-https://doi.org/10.1145/2714064.2660195
+    https://doi.org/10.1145/2714064.2660195
 */
 constexpr uint64_t splitmix64(uint64_t x) {
     uint64_t z = x + ADD;
@@ -21,9 +21,9 @@ constexpr uint64_t splitmix64(uint64_t x) {
 }
 
 /*
-Find multiplicative inverse of odd `x`
-x * inv(x) = 1 MOD 2^64
-https://lemire.me/blog/2017/09/18/computing-the-inverse-of-odd-integers/
+    Find multiplicative inverse of odd `x`
+    x * inv(x) = 1 MOD 2^64
+    https://lemire.me/blog/2017/09/18/computing-the-inverse-of-odd-integers/
 */
 constexpr uint64_t inv64(uint64_t x) {
     uint64_t y = (3 * x) ^ 2;
@@ -34,8 +34,8 @@ constexpr uint64_t inv64(uint64_t x) {
 }
 
 /*
-Reverse xorshift operation: x = x ^ (x >> shift)
-https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html
+    Reverse xorshift operation: x = x ^ (x >> shift)
+    https://marc-b-reynolds.github.io/math/2017/10/13/IntegerBijections.html
 */
 constexpr uint64_t rev_xorshift(uint64_t x, uint64_t shift) {
     while (shift < 64) {

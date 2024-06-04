@@ -16,8 +16,7 @@ uint64_t compute_hash(string& s, uint64_t base) {
 void run(int q, uint64_t base) {
     int n = 1 << q;
     string s, t;
-    char ch[] = { 'A', 'B' };
-
+    char ch[2] = { 'a', 'b' };
     for (int i = 0; i < n; i++) {
         s.push_back(ch[__builtin_parity(i)]);
         t.push_back(ch[!__builtin_parity(i)]);

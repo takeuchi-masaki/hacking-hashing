@@ -34,6 +34,8 @@ uint64_t compute_hash(string& s, uint64_t base) {
     }
     return hash.val;
 }
+
+/* create string from 64bit number */
 string get_string(uint64_t value, int length) {
     string res{};
     for (int ch = 0; ch < length; ch++) {
@@ -42,6 +44,8 @@ string get_string(uint64_t value, int length) {
     }
     return res;
 }
+
+/* generate AB strings from bit */
 string get_string2(uint64_t value, int length) {
     string res{};
     for (int bit = 0; bit < length; bit++) {
@@ -51,8 +55,7 @@ string get_string2(uint64_t value, int length) {
 }
 
 /*
-generate random strings of lowercase letters
-64 bit random number -> 26^length
+    generate random strings of lowercase letters
 */
 void test(uint64_t base, int length) {
     uint64_t MAX_VALUE = 1;
@@ -93,7 +96,7 @@ void test(uint64_t base, int length) {
 }
 
 /*
-generate all 2^n strings with only 'a' and 'b's, of length n
+    generate all 2^n strings with only 'a' and 'b's, of length n
 */
 void test_iter(int base, int length) {
     assert(length < 25);
