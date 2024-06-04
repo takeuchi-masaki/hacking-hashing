@@ -325,15 +325,12 @@ and using a 64-bit modulo is enough to make it robust against hacking.
 [Template code](https://github.com/takeuchi-masaki/hacking-hashing/blob/main/string-collision/saferabinkarp.cpp)
 
 # References
+- [It is high time we let go of the Mersenne Twister - Sebastian Vigna (2019, preprint)](http://arxiv.org/abs/1910.06437)
+- [Blowing up unordered_map, and how to stop getting hacked on it - Neal Wu](https://codeforces.com/blog/entry/62393)
+- [Internet Problem-solving Contest 2014 Problem H: Hashsets Solution Michal Forisek](https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf)
+- [Fast Splittable Pseudorandom Number Generators - Guy L. Steele, Doug Lea, and Christine H. Flood (2014)](https://dl.acm.org/doi/abs/10.1145/2660193.2660195)
+- [On the mathematics behind rolling hashes and anti-hash tests - Daniel Rutschmann](https://codeforces.com/blog/entry/60442)
+- [Fast random integer generation in an interval - Daniel Lemire](https://arxiv.org/abs/1805.10941)
+- [Thue-Morse sequence - Wikipedia](https://en.wikipedia.org/wiki/Thue%E2%80%93Morse_sequence)
 - [cstdlib/RAND_MAX - cplusplus.com](https://cplusplus.com/reference/cstdlib/RAND_MAX/)
 - [ctime/time - cplusplus.com](https://cplusplus.com/reference/ctime/time/)
-- [It is high time we let go of the Mersenne Twister - Sebastian Vigna (2019, preprint)](http://arxiv.org/abs/1910.06437)
-  - http://arxiv.org/abs/1910.06437
-- [Blowing up unordered_map, and how to stop getting hacked on it - Codeforces blog](https://codeforces.com/blog/entry/62393)
-  - https://codeforces.com/blog/entry/62393
-- [Internet Problem-solving Contest 2014 Problem H: Hashsets Solution Michal Forisek](https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf)
-  - https://ipsc.ksp.sk/2014/real/solutions/booklet.pdf
-- [Fast Splittable Pseudorandom Number Generators - Guy L. Steele, Doug Lea, and Christine H. Flood (2014)](https://dl.acm.org/doi/abs/10.1145/2660193.2660195)
-- [Thue-Morse sequence - Wikipedia](https://en.wikipedia.org/wiki/Thue%E2%80%93Morse_sequence)
-- [On the mathematics behind rolling hashes and anti-hash tests](https://codeforces.com/blog/entry/60442)
-  - https://codeforces.com/blog/entry/60442
